@@ -6,17 +6,22 @@ import {
   StyleSheet,
   Pressable,
   Switch,
-  TextInput
+  TextInput,
+  Image,
+  ScrollView
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useState,useEffect } from 'react';
+import { useState,useEffect, use } from 'react';
 import { ThemedButton } from 'react-native-really-awesome-button';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
+
 export default function LivingRoom(){
   const [s1,setS1] = useState(false)
   const [s2,setS2] = useState(false)
   const [s3,setS3] = useState(false)
   const [site,setSite] = useState('')
+  const [imageurl,SetImageurl] = useState('')
+  const [alert,SetAlert] = useState(0)
   const add = async (key, item) => {
     try {
       await AsyncStorage.setItem(key, item);
@@ -94,6 +99,47 @@ const bed = async()=>{
 });
 }
 
+const imgalert = async()=>{
+  console.log('pressed')
+   try{
+         let res = await fetch(site+'/pic');
+         
+         
+          const img = await res.blob()
+          const reader = new FileReader();
+reader.onload = () => { 
+        if (reader.result!='data:application/octet-stream;base64,'){
+            SetAlert(1)
+         }
+         else{
+          SetAlert(0)
+          SetImageurl(reader.result); 
+         }
+
+};
+reader.readAsDataURL(img);
+        }
+        catch(err){
+          console.log(err)
+        }
+}
+
+const imgreset = async()=>{
+  SetImageurl('')
+  SetAlert(0)
+   fetch(site+'/resetalert', {
+      
+  method: 'POST',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    
+  },
+  body: JSON.stringify({
+    setalert:false
+  }),
+});
+}
 
 
   useEffect(()=>{
@@ -104,10 +150,39 @@ const bed = async()=>{
         await setSite(link)
         console.log(link)
       }
+    }
+     console.log('function')
+       const imgalert = async()=>{
+        if(alert==1){
+   try{   
+          let link = await retrieve('site')
+          let res = await fetch(link+'/pic');
+          const img = await res.blob()
+          const reader = new FileReader();
+          reader.onload = () => {
+            
+          if (reader.result!='data:application/octet-stream;base64,'){
+            SetAlert(1)
+         }
+         else{
+          SetAlert(0)
+          SetImageurl(reader.result); 
+         }
+        }
+        reader.readAsDataURL(img);
+        }
+        catch(err){
+          console.log(err)
+        }
+      }
+    }
       fetchData()
-  }
+      const intervalId = setInterval(imgalert, 5000);
+       return () => clearInterval(intervalId);
+
 },[])
   return(
+    <ScrollView>
     <View style={styles.container}>
       <View style={styles.container2}>
       <AnimatedCircularProgress style={styles.progressbar}
@@ -135,9 +210,18 @@ const bed = async()=>{
       <View style={styles.container3}>
       <Switch style={styles.inp} value={s2} onValueChange={bed} thumbColor={'#45cbe2ff'}></Switch>
       <Text style={{color:s2==true?'#5cd441ff':'#f75252ff' , fontSize:20, fontWeight:'bold'}}>Bed Light</Text>
+      
      </View>
+      
      
     </View>
+    <View style={styles.imgContainer}>
+      <Text style={styles.alertText}>{alert==1?"!!!Alert!!!":""}</Text>
+      <Image stye={styles.img} alt ="No alert" source={{uri:imageurl}}  style={{ width: 200, height: 200 }}></Image>
+    </View>
+    <ThemedButton style={styles.btn} name="rick"  textColor="white" backgroundDarker="#5fbe88ff" backgroundColor="#4ede8dff" type="primary" onPress={imgalert}>Set Alert</ThemedButton>
+    <ThemedButton style={styles.btn} name="rick"  textColor="white" backgroundDarker="#5fbe88ff" backgroundColor="#4ede8dff" type="primary" onPress={imgreset}>Reset Alert</ThemedButton>
+    </ScrollView>
   )
 }
    const styles = StyleSheet.create({
@@ -186,6 +270,23 @@ const bed = async()=>{
       marginBottom:10,
       fontFamily:'Roboto',
       fontWeight:3,
+    },
+    img:{
+      alignSelf:'center',
+      marginBottom:20
+    },
+    imgContainer:{
+display:'flex',
+      flexDirection:'column',
+       alignItems:'center',
+       width:'100%',
+       justifyContent:'center'
+
+    },
+    alertText:{
+      fontSize:20,
+      fontWeight:'bold',
+      color:'#ff0000'
     }
 
     })
