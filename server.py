@@ -10,9 +10,9 @@ from email.mime.text import MIMEText
 import cv2
 port = 8080
 email = "noreply8384@gmail.com"
-passs = 'jeak pjov ctvz kvey'
-remail = 'saishanmukhapanidepu@gmail.com'
-mqtt_broker="192.168.1.8"
+passs = ''
+remail = ''
+mqtt_broker=""
 mqtt_topic = "home/livingroom"
 host = socket.gethostname()
 ip = socket.gethostbyname(host)
