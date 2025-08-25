@@ -99,47 +99,6 @@ const bed = async()=>{
 });
 }
 
-const imgalert = async()=>{
-  console.log('pressed')
-   try{
-         let res = await fetch(site+'/pic');
-         
-         
-          const img = await res.blob()
-          const reader = new FileReader();
-reader.onload = () => { 
-        if (reader.result!='data:application/octet-stream;base64,'){
-            SetAlert(1)
-         }
-         else{
-          SetAlert(0)
-          SetImageurl(reader.result); 
-         }
-
-};
-reader.readAsDataURL(img);
-        }
-        catch(err){
-          console.log(err)
-        }
-}
-
-const imgreset = async()=>{
-  SetImageurl('')
-  SetAlert(0)
-   fetch(site+'/resetalert', {
-      
-  method: 'POST',
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-    
-  },
-  body: JSON.stringify({
-    setalert:false
-  }),
-});
-}
 
 
   useEffect(()=>{
@@ -152,35 +111,9 @@ const imgreset = async()=>{
       }
     }
      console.log('function')
-       const imgalert = async()=>{
-       
-   try{   
-          let link = await retrieve('site')
-          let res = await fetch(link+'/pic');
-          const img = await res.blob()
-          const reader = new FileReader();
-          console.log('alert running')
-          reader.onload = () => {
-            
-          if (reader.result!='data:application/octet-stream;base64,'){
-            SetAlert(1)
-             SetImageurl(reader.result); 
-         }
-         else{
-          SetAlert(0)
-         
-         }
-        }
-        reader.readAsDataURL(img);
-      }
-        catch(err){
-          console.log(err)
-        }
-      
-    }
+     
       fetchData()
-      const intervalId = setInterval(imgalert, 5000);
-       return () => clearInterval(intervalId);
+      
 
 },[])
   return(
@@ -216,13 +149,6 @@ const imgreset = async()=>{
      </View>
       
      
-    </View>
-    <View style={styles.imgContainer}>
-      <Text style={styles.alertText}>{alert==1?"!!!Alert!!!":""}</Text>
-      <Image stye={styles.img} alt ="No alert" source={{uri:imageurl}}  style={{ width: 200, height: 200 }}></Image>
-    
-    <ThemedButton style={styles.btn} name="rick"  textColor="white" backgroundDarker="#5fbe88ff" backgroundColor="#4ede8dff" type="primary" onPress={imgalert}>Set Alert</ThemedButton>
-    <ThemedButton style={styles.btn} name="rick"  textColor="white" backgroundDarker="#e79950ff" backgroundColor="#f3b768ff" type="primary" onPress={imgreset}>Reset Alert</ThemedButton>
     </View>
     </ScrollView>
   )
