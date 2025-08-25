@@ -153,28 +153,30 @@ const imgreset = async()=>{
     }
      console.log('function')
        const imgalert = async()=>{
-        if(alert==1){
+       
    try{   
           let link = await retrieve('site')
           let res = await fetch(link+'/pic');
           const img = await res.blob()
           const reader = new FileReader();
+          console.log('alert running')
           reader.onload = () => {
             
           if (reader.result!='data:application/octet-stream;base64,'){
             SetAlert(1)
+             SetImageurl(reader.result); 
          }
          else{
           SetAlert(0)
-          SetImageurl(reader.result); 
+         
          }
         }
         reader.readAsDataURL(img);
-        }
+      }
         catch(err){
           console.log(err)
         }
-      }
+      
     }
       fetchData()
       const intervalId = setInterval(imgalert, 5000);
@@ -218,9 +220,10 @@ const imgreset = async()=>{
     <View style={styles.imgContainer}>
       <Text style={styles.alertText}>{alert==1?"!!!Alert!!!":""}</Text>
       <Image stye={styles.img} alt ="No alert" source={{uri:imageurl}}  style={{ width: 200, height: 200 }}></Image>
-    </View>
+    
     <ThemedButton style={styles.btn} name="rick"  textColor="white" backgroundDarker="#5fbe88ff" backgroundColor="#4ede8dff" type="primary" onPress={imgalert}>Set Alert</ThemedButton>
-    <ThemedButton style={styles.btn} name="rick"  textColor="white" backgroundDarker="#5fbe88ff" backgroundColor="#4ede8dff" type="primary" onPress={imgreset}>Reset Alert</ThemedButton>
+    <ThemedButton style={styles.btn} name="rick"  textColor="white" backgroundDarker="#e79950ff" backgroundColor="#f3b768ff" type="primary" onPress={imgreset}>Reset Alert</ThemedButton>
+    </View>
     </ScrollView>
   )
 }
