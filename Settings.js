@@ -21,7 +21,8 @@ export default function Login({navigation}){
      const add = async (key, item) => {
     try {
       await AsyncStorage.setItem(key, item);
-    } catch (err) {
+    } 
+    catch (err) {
       console.log(err);
     }
   };
@@ -29,7 +30,8 @@ export default function Login({navigation}){
     try {
       let val = await AsyncStorage.getItem(key);
       return (val)
-    } catch (err) {
+    } 
+    catch (err) {
       console.log(err);
     }
   };
@@ -37,37 +39,39 @@ export default function Login({navigation}){
 
    const submit = async()=>{
     try{
-     if(!checked){
         if(txt.length!=0){
             await add('site',txt)
             console.log(txt)
         setTxt('')
         SetChecked(false)
-        navigation.navigate('Home')
+        navigation.navigate('Rooms')
         }
-     }
-        else{
-            console.log('added')
-        setTxt('')
-        SetChecked(false)
-        navigation.navigate('Home')
-        }
-        
     }
     catch(err){
         console.log(err)
     }
 
    }
+ useEffect(()=>{
+    const fetchData = async()=>{
+      let link = await retrieve('site')
+      console.log(link)
+      if(link!=null){
+        await setTxt(link)
+        //console.log(link)
+      }
+    }
+   
+     
+      fetchData()
+      
 
+},[])
     return(
         <View style={styles.container}>
+          <Text>Server link:</Text>
           <View style={styles.container2}>
             <TextInput style={styles.inp} value={txt} onChangeText={setTxt} placeholder='Enter site address'></TextInput> 
-          </View>
-          <View style={styles.container2}>           
-              <Checkbox value={checked} onValueChange={SetChecked}></Checkbox>
-              <Text style={styles.txt}>Use saved address</Text>
           </View>
           <ThemedButton style={styles.btn} name="rick"  textColor="white" backgroundDarker="#5fbe88ff" backgroundColor="#4ede8dff" type="primary" onPress={submit}>Submit</ThemedButton>
        
@@ -85,10 +89,10 @@ export default function Login({navigation}){
     container:{
       flex: 1,
     justifyContent: 'flex-start',
-    alignItems:'center',
+    alignItems:'flex-start',
     backgroundColor: '#ecf0f1',
     padding: 5,
-    margin:5,
+    margin:20,
     marginTop:100
     },
     container2:{

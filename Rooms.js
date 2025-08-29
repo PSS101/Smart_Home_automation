@@ -17,7 +17,7 @@ import Checkbox from 'expo-checkbox';
 import { Directions } from 'react-native-gesture-handler';
 
 
-export default function Home({navigation}){
+export default function Settings({navigation}){
       const [site,setSite] = useState('')
   const [imageurl,SetImageurl] = useState('')
   const [alert,SetAlert] = useState(0)
@@ -33,14 +33,13 @@ export default function Home({navigation}){
 
 
     const imgalert = async()=>{
-  console.log('pressed')
+  //console.log('pressed')
    try{
-         let res = await fetch(site+'/pic');
-         
-         
-          const img = await res.blob()
-          const reader = new FileReader();
-reader.onload = () => { 
+         let res = await fetch(site+'/pic'); 
+        const img = await res.blob()
+        const reader = new FileReader();
+
+        reader.onload = () => { 
         if (reader.result!='data:application/octet-stream;base64,'){
             SetAlert(1)
          }
@@ -49,10 +48,10 @@ reader.onload = () => {
           SetImageurl(reader.result); 
          }
 
-};
-reader.readAsDataURL(img);
-        }
-        catch(err){
+        };
+        reader.readAsDataURL(img);
+      }
+    catch(err){
           console.log(err)
         }
 }
@@ -82,7 +81,7 @@ const imgreset = async()=>{
           let res = await fetch(link+'/pic');
           const img = await res.blob()
           const reader = new FileReader();
-          console.log('alert running')
+          //console.log('alert running')
           reader.onload = () => {
             
           if (reader.result!='data:application/octet-stream;base64,'){
@@ -95,6 +94,7 @@ const imgreset = async()=>{
          }
         }
         reader.readAsDataURL(img);
+      
       }
         catch(err){
           console.log(err)
@@ -115,17 +115,20 @@ const imgreset = async()=>{
                  
             <View style={styles.container1}>
             <Pressable style={styles.icon} onPress={()=>{navigation.navigate('Living-Room')}}><Text style={styles.iconText}> Living Room</Text></Pressable>
-            <Pressable style={styles.icon} onPress={()=>{navigation.navigate('Living-Room')}}><Text style={styles.iconText}> Living Room</Text></Pressable>
+            <Pressable style={styles.icon} onPress={()=>{navigation.navigate('Living-Room')}}><Text style={styles.iconText}> Bed Room</Text></Pressable>
             </View>
+
             <View style={styles.container1}>
+
             <Pressable style={styles.icon} onPress={()=>{navigation.navigate('Living-Room')}}><Text style={styles.iconText}> Living Room</Text></Pressable>
             <Pressable style={styles.icon} onPress={()=>{navigation.navigate('Living-Room')}}><Text style={styles.iconText}> Living Room</Text></Pressable>
+             
              </View>
                 <Text style={styles.txt}>Home Alert</Text>
                  <ThemedButton style={styles.btn} name="rick"  textColor="white" backgroundDarker="#5fbe88ff" backgroundColor="#4ede8dff" type="primary" onPress={imgalert}>Set Alert</ThemedButton>
-                 <ThemedButton style={styles.btn} name="rick"  textColor="white" backgroundDarker="#e79950ff" backgroundColor="#f3b768ff" type="primary" onPress={imgreset}>Reset Alert</ThemedButton>
-                
-             </View>         
+                 <ThemedButton style={styles.btn} name="rick"  textColor="white" backgroundDarker="#e79950ff" backgroundColor="#f3b768ff" type="primary" onPress={imgreset}>Reset Alert</ThemedButton>     
+             </View>   
+
         </ScrollView>
        
     )

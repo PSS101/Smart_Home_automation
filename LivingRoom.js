@@ -40,19 +40,19 @@ export default function LivingRoom(){
   const fetchSite = async()=>{
     if(site.length==0){
     let x = await retrieve('site')
-    console.log(x)
+    //console.log(x)
     setSite(x)
     }
-    console.log(site)
+    //console.log(site)
   }
   const light = async()=>{
     let lightState=""
     if(s1==false){
-      console.log('on')
+     // console.log('on')
       lightState='on'
     }
     else{
-      console.log('off')
+     // console.log('off')
       lightState='off'
     }
     setS1(s1==true?false:true)
@@ -104,13 +104,13 @@ const bed = async()=>{
   useEffect(()=>{
     const fetchData = async()=>{
       let link = await retrieve('site')
-      console.log(link)
+     // console.log(link)
       if(link!=null){
         await setSite(link)
-        console.log(link)
+       // console.log(link)
       }
     }
-     console.log('function')
+     
      
       fetchData()
       

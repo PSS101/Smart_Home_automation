@@ -4,29 +4,28 @@ import { enableScreens } from 'react-native-screens';
 enableScreens();
 import React,{useState} from 'react';
 import { StyleSheet, Text, View,TextInput, TouchableOpacity ,SafeAreaView } from 'react-native';
-import {NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Login from './Login.js';
+import { NavigationContainer } from '@react-navigation/native';
+
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Settings from './Settings.js';
 import LivingRoom  from './LivingRoom.js';
-import Home from './Home.js'
-const Stack = createNativeStackNavigator();
+import Room from './Rooms.js'
+const Tab = createBottomTabNavigator();
 export default function App() {
 
       return (
-       <NavigationContainer>
-             
-             
-             <Stack.Navigator initialRouteName="Login">
-               <Stack.Screen name="Home" component={Home} />
-               <Stack.Screen name="Login" 
-                component={Login} />
-               <Stack.Screen name="Living-Room" component={LivingRoom} />
+  <NavigationContainer>
+             <Tab.Navigator initialRouteName="Rooms" screenOptions={{ headerShown: false,   }}>
+                <Tab.Screen name="Living-Room" 
+                component={LivingRoom}   options={{ tabBarButton:()=> false}}/>
+
+                <Tab.Screen name="Rooms" 
+                component={Room} />
+
+                <Tab.Screen name="Settings" component={Settings} />
                 
-             </Stack.Navigator>
-            
-             
-             
-           </NavigationContainer>
+             </Tab.Navigator>
+     </NavigationContainer>
       );
 }
 
