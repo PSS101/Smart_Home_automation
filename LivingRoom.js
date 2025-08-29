@@ -48,11 +48,9 @@ export default function LivingRoom(){
   const light = async()=>{
     let lightState=""
     if(s1==false){
-     // console.log('on')
       lightState='on'
     }
     else{
-     // console.log('off')
       lightState='off'
     }
     setS1(s1==true?false:true)
@@ -75,11 +73,9 @@ export default function LivingRoom(){
 const bed = async()=>{
     let bedLightState=""
     if(s2==false){
-      console.log('bedlight on')
       bedLightState='on'
     }
     else{
-      console.log('bedlight off')
       bedLightState='off'
     }
     setS2(s2==true?false:true)
@@ -117,7 +113,7 @@ const bed = async()=>{
 
 },[])
   return(
-    <ScrollView>
+    
     <View style={styles.container}>
       <View style={styles.container2}>
       <AnimatedCircularProgress style={styles.progressbar}
@@ -127,7 +123,7 @@ const bed = async()=>{
   tintColor="#FFA500"
   rotation={180}
   backgroundColor="white"
-     >{(fill)=>(<Text>Temp</Text>)}</AnimatedCircularProgress>
+     >{(fill)=>(<Text style={styles.txt}>Temp</Text>)}</AnimatedCircularProgress>
      <AnimatedCircularProgress style={styles.progressbar}
   size={120}
   width={15}
@@ -135,43 +131,44 @@ const bed = async()=>{
   tintColor="#00e0ff"
   rotation={180}
   backgroundColor="white"
-     >{(fill)=>(<Text>Humidity</Text>)}</AnimatedCircularProgress>
+     >{(fill)=>(<Text style={styles.txt}>Humidity</Text>)}</AnimatedCircularProgress>
      </View>
      <Text style={styles.heading}>Devices</Text>
      <View style={styles.container3}>
-      <Switch style={styles.inp} value={s1} onValueChange={light} thumbColor={'#45cbe2ff'}> </Switch>
+      <Switch style={styles.inp} value={s1} onValueChange={light} thumbColor={'#80ccd1ff'}> </Switch>
       <Text style={{color:s1==true?'#5cd441ff':'#f75252ff' , fontSize:20, fontWeight:'bold'}}>Light</Text>
      </View>
       <View style={styles.container3}>
-      <Switch style={styles.inp} value={s2} onValueChange={bed} thumbColor={'#45cbe2ff'}></Switch>
+      <Switch style={styles.inp} value={s2} onValueChange={bed} thumbColor={'#80ccd1ff'}></Switch>
       <Text style={{color:s2==true?'#5cd441ff':'#f75252ff' , fontSize:20, fontWeight:'bold'}}>Bed Light</Text>
       
      </View>
       
      
     </View>
-    </ScrollView>
+  
   )
 }
    const styles = StyleSheet.create({
-      btn:{
-    color:'white',
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    margin:5,
-    padding:10,  
+    btn:{
+      color:'white',
+      justifyContent: 'center', 
+      alignItems: 'center', 
+      margin:5,
+      padding:10,  
     },
     container:{
       flex: 1,
-    alignItems:'center',
-    backgroundColor: '#ecf0f1',
-    padding: 5,
-    margin:5
+      alignItems:'center',
+      backgroundColor: '#202125',
+      height:'100%',
+      padding: 5,
+    
     },
     container2:{
       display:'flex',
       flexDirection:'row',
-       alignItems:'center',
+      alignItems:'center',
     },
    container3:{
       display:'flex',
@@ -180,9 +177,18 @@ const bed = async()=>{
        alignItems:'center',
        marginLeft:50,
     },
-   
     txt:{
       margin:10,
+      color:'#ffffff',
+
+    },
+    heading:{
+      fontSize:30,
+      marginTop:40,
+      marginBottom:10,
+      fontFamily:'Roboto',
+      fontWeight:3,
+      color:'#ffffff',
 
     },
     progressbar:{
@@ -193,29 +199,17 @@ const bed = async()=>{
       transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }],
       margin:10,
     },
-    heading:{
-      fontSize:30,
-      marginTop:40,
-      marginBottom:10,
-      fontFamily:'Roboto',
-      fontWeight:3,
-    },
     img:{
       alignSelf:'center',
       marginBottom:20
     },
     imgContainer:{
-display:'flex',
+      display:'flex',
       flexDirection:'column',
-       alignItems:'center',
-       width:'100%',
-       justifyContent:'center'
+      alignItems:'center',
+      width:'100%',
+      justifyContent:'center'
 
     },
-    alertText:{
-      fontSize:20,
-      fontWeight:'bold',
-      color:'#ff0000'
-    }
 
     })

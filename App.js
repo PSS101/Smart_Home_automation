@@ -4,35 +4,72 @@ import { enableScreens } from 'react-native-screens';
 enableScreens();
 import React,{useState} from 'react';
 import { StyleSheet, Text, View,TextInput, TouchableOpacity ,SafeAreaView } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-
+import { createStaticNavigation, NavigationContainer } from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Settings from './Settings.js';
 import LivingRoom  from './LivingRoom.js';
+import Alerts from './alerts.js'
 import Room from './Rooms.js'
+import Bedroom from './BedRoom.js';
 const Tab = createBottomTabNavigator();
-export default function App() {
+const Stack = createStackNavigator();
+function Tabs(){
+  return(
+    <Tab.Navigator initialRouteName="Rooms" 
+             screenOptions={({route})=>({ headerShown: false, 
+              
+                tabBarIcon:()=>{
+                  let iconName=''
+                  if(route.name=='Rooms'){
+                    iconName = 'home'
+                  }
+                  if(route.name=='Settings'){
+                    iconName = 'settings'
+                  }
+                  if(route.name =='Alerts'){
+                    iconName = 'warning'
+                  }           
+                return <Ionicons name = {iconName} size={20} color={'#ffffff'}/>
+                },
+                
+                tabBarStyle: {
+                backgroundColor: '#202125',
+                },
+                
+              })}>
 
-      return (
-  <NavigationContainer>
-             <Tab.Navigator initialRouteName="Rooms" screenOptions={{ headerShown: false,   }}>
-                <Tab.Screen name="Living-Room" 
-                component={LivingRoom}   options={{ tabBarButton:()=> false}}/>
+                <Tab.Screen name="Alerts" component={Alerts} screenOptions={{}}/>
 
                 <Tab.Screen name="Rooms" 
                 component={Room} />
 
                 <Tab.Screen name="Settings" component={Settings} />
-                
              </Tab.Navigator>
-     </NavigationContainer>
+  )
+}
+
+
+
+export default function App() {
+    let TabOptions={
+      headerStyle: {backgroundColor:'#202125'}, headerTintColor:'#ffffff'
+    }
+      return (
+    <NavigationContainer>
+      <Stack.Navigator >
+        <Stack.Screen name="Home" component={Tabs}  options={{ headerShown: false }}/>
+        <Stack.Screen name="LivingRoom" component={LivingRoom} options={TabOptions}/>
+        <Stack.Screen name="BedRoom" component={Bedroom} options={TabOptions}/>
+      </Stack.Navigator>
+    </NavigationContainer>
       );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },

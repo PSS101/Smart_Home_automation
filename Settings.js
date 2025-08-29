@@ -69,7 +69,7 @@ export default function Login({navigation}){
 },[])
     return(
         <View style={styles.container}>
-          <Text>Server link:</Text>
+          <Text style={styles.txt}>Server link:</Text>
           <View style={styles.container2}>
             <TextInput style={styles.inp} value={txt} onChangeText={setTxt} placeholder='Enter site address'></TextInput> 
           </View>
@@ -78,39 +78,41 @@ export default function Login({navigation}){
         </View>
     )
     }
-    const styles = StyleSheet.create({
-      btn:{
+const styles = StyleSheet.create({
+  btn:{
     color:'white',
     justifyContent: 'center', 
     alignItems: 'center', 
     margin:5,
     padding:10,  
     },
-    container:{
+  container:{
       flex: 1,
     justifyContent: 'flex-start',
     alignItems:'flex-start',
     backgroundColor: '#ecf0f1',
-    padding: 5,
-    margin:20,
-    marginTop:100
-    },
-    container2:{
+    padding: 50,
+    backgroundColor: '#202125',
+  },
+  container2:{
       display:'flex',
       flexDirection:'row',
       justifyContent:'center',
        alignItems:'center',
-    },
-    inp:{
+  },
+  inp:{
       width:200,
       height:40,
       borderWidth:1,
       borderRadius:10,
       margin:10,
-    },
-    txt:{
+      borderColor:'#ffffff',
+      color:'#ffffff'
+  },
+  txt:{
       margin:10,
+      color:'#ffffff'
 
-    }
+  }
 
     })
