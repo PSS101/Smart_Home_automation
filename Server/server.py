@@ -1,4 +1,4 @@
-from flask import Flask,request,send_file
+from flask import Flask,request,send_file,jsonify
 import time
 import paho.mqtt.client as mqtt
 import paho.mqtt.subscribe as Subscribe
@@ -7,12 +7,16 @@ import ssl
 import socket
 import requests
 from email.mime.text import MIMEText
+import imutils
 import cv2
+
+face_cascade = cv2.CascadeClassifier('/home/rpi4/.local/lib/python3.11/site-packages/cv2/data/haarcascade_frontalface_default.xml')
+
 port = 8080
 email = "noreply8384@gmail.com"
-passs = ''
-remail = ''
-mqtt_broker=""
+passs = 'jeak pjov ctvz kvey'
+remail = 'saishanmukhapanidepu@gmail.com'
+mqtt_broker="192.168.1.8"
 mqtt_topic = "home/livingroom"
 host = socket.gethostname()
 ip = socket.gethostbyname(host)
@@ -32,7 +36,9 @@ message = MIMEText(msg,'plain')
 message['Subject'] = "Server started"
 message['From'] = email
 server=None
-imgalert = 0 
+imgalert = 0
+w=""
+
 try:
 	server = smtplib.SMTP('smtp.gmail.com',587)
 	server.starttls()
@@ -46,15 +52,23 @@ except requests.exceptions.RequestException as e:
 
 
 def on_message(client,userdata,mssg):
-	alertmsg = mssg.payload.decode()
-	global imgalert
-	imgalert = 1 if alertmsg == 'alert' else 0
-	print(alertmsg)
-	print(imgalert)
+	if (mssg.topic == 'esp/alert'):
+		alertmsg = mssg.payload.decode()
+		global imgalert
+		imgalert = 1 if alertmsg == 'alert' else 0
+		print(alertmsg)
+		print(imgalert)
+	elif(mssg.topic == 'esp/weather'):
+		m = mssg.payload.decode()
+		global w
+		w = m
+		print(w)
 
 client=mqtt.Client(mqtt.CallbackAPIVersion.VERSION2,'server')
 client.connect(mqtt_broker,port=1883)
 client.subscribe('esp/alert')
+client.subscribe('esp/weather')
+
 client.on_message = on_message
 client.loop_start()
 
@@ -65,14 +79,26 @@ app = Flask(__name__)
 @app.route("/pic")
 def takepic():
 	client.publish("rpi/alert","check")
+	
+	global imgalert
 	print(imgalert)
 	if(imgalert==1):
+		
 		c = cv2.VideoCapture(0)
 		if c.isOpened():
 			for i in range(15):
 				ret,img = c.read()
 			ret,img = c.read()
+			
 			if ret:
+				grayimg = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+				face = face_cascade.detectMultiScale(grayimg,scaleFactor=1.1,minNeighbors=5)
+				print(len(face))
+				if(not len(face)==0):
+					client.publish('rpi/alert','reset')
+					imgalert = 0
+				for(x,y,w,h) in face:
+					cv2.rectangle(img,(x,y),(x+w,y+h),(0,0,255),2)
 				path = '/home/rpi4/Downloads/img.png'
 				cv2.imwrite(path,img)
 			c.release()
@@ -94,6 +120,12 @@ def hello_world():
         	client.publish("rpi/test/bed",data['BedLight'])
         return "check console"
 
+
+@app.route("/weather")
+def weather():
+	global w
+	return jsonify({'mssg':w})
+
 @app.route('/resetalert',methods=['POST'])
 def resetalert():
 	client.publish('rpi/alert','reset')
@@ -101,5 +133,5 @@ def resetalert():
 	imgalert = 0
 	return "reset alert"
 if __name__ == '__main__':
-	app.run(host='0.0.0.0',port=port)
+	app.run(debug=False,host='0.0.0.0',port=port)
         
