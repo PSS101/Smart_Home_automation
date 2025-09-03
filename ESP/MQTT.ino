@@ -122,11 +122,11 @@ void loop() {
     else{
         client.publish("esp/alert","");
     }
-    if(!t.isnan() && !h.isnan()){
-      String mssg = String(t)+','+String(h)
-      char* buf[sizeof(mssg)];
+    if(!isnan(t) && !isnan(h)){
+      String mssg = String(t)+','+String(h);
+      char buf[mssg.length()+1];
       mssg.toCharArray(buf, sizeof(buf));
-      client.subscribe("esp/weather",buf);
+      client.publish("esp/weather",buf);
     }
   }
   
