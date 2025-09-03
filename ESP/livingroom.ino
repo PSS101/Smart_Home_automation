@@ -153,16 +153,11 @@ void loop() {
     }
     if(!isnan(temp) && !isnan(h)){
       char buf[32];
-      snprintf(buf, sizeof(buf), "%.2f,%.2f", temp, h);
+      snprintf(buf, sizeof(buf), "%.2f,%.2f,%d,%d", temp, h,ppm,lpg);
       client.publish("esp/weather",buf);
+     
     }
-      char buf[16];
-     snprintf(buf, sizeof(buf), "%d", ppm);
-      client.publish("esp/airquality",buf);
 
-    
-     snprintf(buf, sizeof(buf), "%d", lpg);
-      client.publish("esp/lpg",buf);
       
   }
 
