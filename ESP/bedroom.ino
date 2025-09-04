@@ -22,7 +22,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
   if(strcmp(topic,"rpi/rgb")==0){
      char* token;
      char* rest = message; // Pointer to the remaining part of the string
-
       for(int i=0;i<3;i++){
         token = strtok_r(rest, ",", &rest); // Use strtok_r for reentrancy
         rgb[i] = atoi(token);// Process or store the extracted token
@@ -30,7 +29,10 @@ void callback(char* topic, byte* payload, unsigned int length) {
       analogWrite(12,rgb[0]);
       analogWrite(13,rgb[1]);
       analogWrite(14,rgb[2]);
-
+   }
+   else if(strcmp(topic,"rpi/dim")==0){
+    int x = atoi(message);
+    dacWrite(25,x);
    }
    
   Serial.println("-----------------------");
@@ -42,6 +44,7 @@ void reconnect() {
     if (client.connect(mqttClientName)) {
       Serial.println("connected");
       client.subscribe("rpi/rgb");
+      client.subscribe("rpi/dim");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -73,6 +76,7 @@ void setup() {
   pinMode(12,OUTPUT);
   pinMode(13,OUTPUT);
   pinMode(14,OUTPUT);
+  pinMode(25,OUTPUT);
   digitalWrite(12,LOW);
   digitalWrite(13,LOW);
   digitalWrite(14,LOW);
