@@ -13,6 +13,7 @@ import LivingRoom  from './LivingRoom.js';
 import Alerts from './alerts.js'
 import Room from './Rooms.js'
 import Bedroom from './BedRoom.js';
+import Weather from './weather.js';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 function Tabs(){
@@ -30,7 +31,10 @@ function Tabs(){
                   }
                   if(route.name =='Alerts'){
                     iconName = 'warning'
-                  }           
+                  }  
+                  if(route.name =='Weather'){
+                    iconName = 'cloud'
+                  }         
                 return <Ionicons name = {iconName} size={20} color={'#ffffff'}/>
                 },
                 
@@ -41,7 +45,7 @@ function Tabs(){
               })}>
 
                 <Tab.Screen name="Alerts" component={Alerts} screenOptions={{}}/>
-
+                <Tab.Screen name="Weather" component={Weather} screenOptions={{}}/>
                 <Tab.Screen name="Rooms" 
                 component={Room} />
 

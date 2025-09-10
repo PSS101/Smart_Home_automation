@@ -22,6 +22,8 @@ export default function LivingRoom(){
   const [site,setSite] = useState('')
   const [imageurl,SetImageurl] = useState('')
   const [alert,SetAlert] = useState(0)
+  const [h,Seth] = useState(50)
+  const [t,Sett] = useState(28)
   const add = async (key, item) => {
     try {
       await AsyncStorage.setItem(key, item);
@@ -99,16 +101,29 @@ const bed = async()=>{
 
   useEffect(()=>{
     const fetchData = async()=>{
+      try{
       let link = await retrieve('site')
+      let res = await fetch(link+"/weather")
+      const d = await res.json()
+      const weather =  d.mssg.split(',')
+      Seth(Number(weather[1]))
+      Sett(Number(weather[0]))
      // console.log(link)
       if(link!=null){
         await setSite(link)
        // console.log(link)
       }
     }
+      catch (err){
+        console.log(err)
+      }
+      }
+      
+    
      
      
-      fetchData()
+      const intervalId = setInterval(fetchData, 5000);
+       return () => clearInterval(intervalId);
       
 
 },[])
@@ -116,22 +131,40 @@ const bed = async()=>{
     
     <View style={styles.container}>
       <View style={styles.container2}>
+
+        <View style={styles.container4}>
+        <Text style={styles.txt}>Temperature</Text>
       <AnimatedCircularProgress style={styles.progressbar}
-  size={120}
+  size={125}
   width={15}
-  fill={50}
+  fill={t}
   tintColor="#FFA500"
-  rotation={180}
+  rotation={245}
   backgroundColor="white"
-     >{(fill)=>(<Text style={styles.txt}>Temp</Text>)}</AnimatedCircularProgress>
+  arcSweepAngle={225}
+     >{(fill)=>(<Text style={styles.txt}>{t}°C</Text>)}</AnimatedCircularProgress>
+
+</View>
+
+
+<View style={styles.container4}>
+        <Text style={styles.txt}>Humidity</Text>
      <AnimatedCircularProgress style={styles.progressbar}
-  size={120}
+  size={125}
   width={15}
-  fill={50}
+  fill={h}
   tintColor="#00e0ff"
-  rotation={180}
+  rotation={245}
   backgroundColor="white"
-     >{(fill)=>(<Text style={styles.txt}>Humidity</Text>)}</AnimatedCircularProgress>
+  arcSweepAngle={225
+    
+  }
+     >{(fill)=>(<Text style={styles.txt}>{h}%</Text>)}</AnimatedCircularProgress>
+
+   
+    </View>
+
+
      </View>
      <Text style={styles.heading}>Devices</Text>
      <View style={styles.container3}>
@@ -162,13 +195,17 @@ const bed = async()=>{
       alignItems:'center',
       backgroundColor: '#202125',
       height:'100%',
-      padding: 5,
+      width:'100%',
+      padding: 10,
+    
     
     },
     container2:{
       display:'flex',
       flexDirection:'row',
       alignItems:'center',
+      width:'100%',
+      marginLeft:10
     },
    container3:{
       display:'flex',
@@ -177,9 +214,15 @@ const bed = async()=>{
        alignItems:'center',
        marginLeft:50,
     },
+    container4:{
+      display:'flex',
+      flexDirection:'column',
+      alignItems:'center',
+    },
     txt:{
       margin:10,
       color:'#ffffff',
+      
 
     },
     heading:{
@@ -193,7 +236,8 @@ const bed = async()=>{
     },
     progressbar:{
       margin:10,
-      justifyContent:'flex-start'
+      justifyContent:'flex-start',
+      
     },
     inp:{
       transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }],

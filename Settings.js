@@ -73,8 +73,7 @@ export default function Login({navigation}){
           <View style={styles.container2}>
             <TextInput style={styles.inp} value={txt} onChangeText={setTxt} placeholder='Enter site address'></TextInput> 
           </View>
-          <ThemedButton style={styles.btn} name="rick"  textColor="white" backgroundDarker="#5fbe88ff" backgroundColor="#4ede8dff" type="primary" onPress={submit}>Submit</ThemedButton>
-       
+          <ThemedButton style={styles.btn} name="rick"  textColor="white" backgroundDarker="#5fbe88ff" backgroundColor="#4ede8dff" type="primary" onPress={submit}>Submit</ThemedButton>    
         </View>
     )
     }

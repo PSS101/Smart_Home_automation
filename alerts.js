@@ -30,35 +30,37 @@ export default function Settings({navigation}){
       console.log(err);
     }
   };
+  const add = async (key, item) => {
+    try {
+      await AsyncStorage.setItem(key, item);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-
-    const imgalert = async()=>{
-  //console.log('pressed')
-   try{
-         let res = await fetch(site+'/pic'); 
-        const img = await res.blob()
-        const reader = new FileReader();
-
-        reader.onload = () => { 
-        if (reader.result!='data:application/octet-stream;base64,'){
-            SetAlert(1)
-         }
-         else{
-          SetAlert(0)
-          SetImageurl(reader.result); 
-         }
-
-        };
-        reader.readAsDataURL(img);
-      }
-    catch(err){
-          console.log(err)
-        }
+const imgset = async()=>{
+  let link = await retrieve('site')
+          setSite(link)
+  console.log('setalert')
+  SetAlert(1)
+   fetch(link+'/setalert', {
+      
+  method: 'POST',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    
+  },
+  body: JSON.stringify({
+    setalert:true
+  }),
+});
 }
 
 const imgreset = async()=>{
   SetImageurl('')
   SetAlert(0)
+  console.log(site)
    fetch(site+'/resetalert', {
       
   method: 'POST',
@@ -78,19 +80,17 @@ const imgreset = async()=>{
        
    try{   
           let link = await retrieve('site')
+          setSite(link)
           let res = await fetch(link+'/pic');
           const img = await res.blob()
           const reader = new FileReader();
           //console.log('alert running')
           reader.onload = () => {
             
-          if (reader.result!='data:application/octet-stream;base64,'){
-            SetAlert(1)
+          if (reader.result!='data:application/octet-stream;base64,'){  
              SetImageurl(reader.result); 
          }
-         else{
-          SetAlert(0)
-         
+         else{   
          }
         }
         reader.readAsDataURL(img);
@@ -99,22 +99,32 @@ const imgreset = async()=>{
         catch(err){
           console.log(err)
         }
-      
+   
     }
-     
-      const intervalId = setInterval(imgalert, 5000);
-       return () => clearInterval(intervalId);
+    let intervalId;
+     if(alert==1){
+       intervalId = setInterval(imgalert, 5000);
+     }
+     else if(alert==0){
+      clearInterval(intervalId);
+     }
+       return () => {
+        if(intervalId && alert==0){
+          clearInterval(intervalId);
+     }
+    
+  }
 
-},[])
+},[alert])
     return(
       
 
             <View  style={styles.container}>
                 <Text style={{color:imageurl?'#ff0000':'#ffffff', fontSize:20,fontWeight:'bold',}}>{imageurl?"!!!Intruder Alert!!!":'No Alerts'} </Text>
-                   <Image alt ="No alert" source={{uri:imageurl}} style={{height:imageurl==""?0:200,width:imageurl==''?0:200}}  ></Image>
+                   <Image alt ="No alert" source={{uri:imageurl}} style={{height:imageurl?200:0,width:imageurl?200:0}}  ></Image>
        
                 <Text style={styles.txt}>Set Home Alert</Text>
-                 <ThemedButton style={styles.btn} name="rick"  textColor="white" backgroundDarker="#5fbe88ff" backgroundColor="#4ede8dff" type="primary" onPress={imgalert}>Set Alert</ThemedButton>
+                 <ThemedButton style={styles.btn} name="rick"  textColor="white" backgroundDarker="#5fbe88ff" backgroundColor="#4ede8dff" type="primary" onPress={imgset}>Set Alert</ThemedButton>
                  <ThemedButton style={styles.btn} name="rick"  textColor="white" backgroundDarker="#e79950ff" backgroundColor="#f3b768ff" type="primary" onPress={imgreset}>Reset Alert</ThemedButton>     
              </View>   
 

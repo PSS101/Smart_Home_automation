@@ -7,7 +7,8 @@ import {
   Pressable,
   TextInput,
   ScrollView,
-  Image
+  Image,
+  Alert
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState,useEffect } from 'react';
@@ -17,12 +18,11 @@ import Checkbox from 'expo-checkbox';
 import { Directions } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
 export default function Settings({navigation}){
       const [site,setSite] = useState('')
   const [imageurl,SetImageurl] = useState('')
   const [alert,SetAlert] = useState(0)
-
+  const [modalVisible, setModalVisible] = useState(false);
   const retrieve = async (key) => {
     try {
       let val = await AsyncStorage.getItem(key);
@@ -33,7 +33,7 @@ export default function Settings({navigation}){
   };
   
     return(
-      
+         
 
             <View  style={styles.container}>
             <View style={styles.container1}>
@@ -65,12 +65,10 @@ export default function Settings({navigation}){
                 <MaterialCommunityIcons  name = {'shovel'} size={20} color={'#ffffff'}/>
                 <Text style={styles.iconText}>Garden</Text>
               </View>
-            </Pressable>
-            
+            </Pressable>  
              </View>
               </View>
             
-
        
     )
 }
@@ -118,18 +116,18 @@ iconText:{
 img:{
       alignSelf:'center',
       marginBottom:20
-    },
-    imgContainer:{
+},
+imgContainer:{
       display:'flex',
       flexDirection:'column',
       alignItems:'center',
       width:'100%',
       justifyContent:'center'
 
-    },
-    txt:{
+},
+txt:{
         fontWeight:'bold',
         fontSize:25,
         margin:10
-    }
+}
 })
