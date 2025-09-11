@@ -37,15 +37,15 @@ export default function Settings({navigation}){
 
             <View  style={styles.container}>
             <View style={styles.container1}>
-            <Pressable style={styles.icon} onPress={()=>{navigation.navigate('LivingRoom')}}>
-              <View>
+            <Pressable style={styles.iconbtn} onPress={()=>{navigation.navigate('LivingRoom')}}>
+              <View style={styles.icon}>
                 <Ionicons name = {'home'} size={20} color={'#ffffff'}/>
                 <Text style={styles.iconText}> Living Room</Text>
               </View>
             </Pressable>
 
-            <Pressable style={styles.icon} onPress={()=>{navigation.navigate('BedRoom')}}>
-              <View>
+            <Pressable style={styles.iconbtn} onPress={()=>{navigation.navigate('BedRoom')}}>
+              <View style={styles.icon}>
                 <Ionicons name = {'bed'} size={20} color={'#ffffff'}/>
                 <Text style={styles.iconText}>Bed Room</Text>
               </View>
@@ -53,15 +53,15 @@ export default function Settings({navigation}){
             </View>
 
             <View style={styles.container1}>
-            <Pressable style={styles.icon} onPress={()=>{navigation.navigate('Living-Room')}}>
-              <View>
+            <Pressable style={styles.iconbtn} onPress={()=>{navigation.navigate('Living-Room')}}>
+              <View style={styles.icon}>
                 <Ionicons name = {'home'} size={20} color={'#ffffff'}/>
                 <Text style={styles.iconText}> Living Room</Text>
               </View>
             </Pressable>
 
-            <Pressable style={styles.icon} onPress={()=>{navigation.navigate('Living-Room')}}>
-              <View>
+            <Pressable style={styles.iconbtn} onPress={()=>{navigation.navigate('Living-Room')}}>
+              <View style={styles.icon}>
                 <MaterialCommunityIcons  name = {'shovel'} size={20} color={'#ffffff'}/>
                 <Text style={styles.iconText}>Garden</Text>
               </View>
@@ -96,11 +96,11 @@ container:{
     backgroundColor: '#202125',
    
 },
-icon:{
+iconbtn:{
     width:100,
     height:100,
     display:'flex',
-    borderRadius:50,
+    borderRadius:20,
     backgroundColor:'#53ccebff',
     textAlign:'center',
     justifyContent:'center',
@@ -113,8 +113,9 @@ iconText:{
     color:'white',
     width:100
 },
+
 img:{
-      alignSelf:'center',
+      aligncon:'center',
       marginBottom:20
 },
 imgContainer:{
